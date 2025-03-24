@@ -1,0 +1,145 @@
+model:
+  target: vwm.models.diffusion.DiffusionEngine
+  params:
+    use_ema: true
+    input_key: img_seq
+    scale_factor: 0.18215
+    disable_first_stage_autocast: true
+    en_and_decode_n_samples_a_time: 7
+    n_context_frames: &n_context_frames 6
+
+    denoiser_config:
+      target: vwm.modules.diffusionmodules.denoiser.Denoiser
+      params:
+        scaling_config:
+          target: vwm.modules.diffusionmodules.denoiser_scaling.VScalingWithEDMcNoise
+
+    network_config:
+      target: vwm.modules.diffusionmodules.video_model.VideoUNet
+      params:
+        adm_in_channels: 544
+        num_classes: sequential
+        use_checkpoint: false
+        in_channels: 8
+        out_channels: 4
+        model_channels: 320
+        attention_resolutions: [ 4, 2, 1 ]
+        num_res_blocks: 2
+        channel_mult: [ 1, 2, 4, 4 ]
+        num_head_channels: 64
+        use_linear_in_transformer: true
+        transformer_depth: 1
+        context_dim: 1056
+        spatial_transformer_attn_type: softmax-xformers
+        extra_ff_mix_layer: true
+        use_spatial_context: true
+        merge_strategy: learned_with_images
+        video_kernel_size: [ 3, 1, 1 ]
+        n_context_frames: *n_context_frames
+
+    conditioner_config:
+      target: vwm.modules.GeneralConditioner
+      params:
+        emb_models:
+          - input_key: cond_frames_without_noise
+            is_trainable: false
+            target: vwm.modules.encoders.modules.FrozenOpenCLIPImagePredictionEmbedder
+            params:
+              open_clip_config:
+                target: vwm.modules.encoders.modules.FrozenOpenCLIPImageEmbedder
+                params:
+                  freeze: true
+
+          - input_key: cond_frames
+            is_trainable: false
+            target: vwm.modules.encoders.modules.VideoPredictionEmbedderWithEncoder
+            params:
+              disable_encoder_autocast: true
+              n_context_frames: *n_context_frames
+
+              encoder_config:
+                target: vwm.models.autoencoder.AutoencoderKLModeOnly
+                params:
+                  embed_dim: 4
+                  monitor: val/rec_loss
+
+                  ddconfig:
+                    attn_type: vanilla-xformers
+                    z_channels: 4
+                    resolution: 256
+                    in_channels: 3
+                    out_channels: 3
+                    ch: 128
+                    ch_mult: [ 1, 2, 4, 4 ]
+                    num_res_blocks: 2
+                    attn_resolutions: [ ]
+                    dropout: 0.0
+
+                  loss_config:
+                    target: torch.nn.Identity
+
+          - input_key: lam_inputs
+            is_trainable: false
+            target: vwm.modules.encoders.modules.VideoPredictionEmbedderWithLAMEncoder
+            params:
+              lam_config:
+                target: external.lam.model.Genie
+                params:
+                  image_channels: 3
+                  lam_model_dim: 1024
+                  lam_latent_dim: 32
+                  lam_patch_size: 16
+                  lam_enc_blocks: 16
+                  lam_dec_blocks: 16
+                  lam_num_heads: 16
+                  ckpt_path: path_to/lam/epoch=99.ckpt
+
+          - input_key: context_len
+            is_trainable: false
+            target: vwm.modules.encoders.modules.ConcatTimestepEmbedderND
+            params:
+              output_dim: 256
+
+          - input_key: context_aug
+            is_trainable: false
+            target: vwm.modules.encoders.modules.ConcatTimestepEmbedderND
+            params:
+              output_dim: 256
+
+    first_stage_config:
+      target: vwm.models.autoencoder.AutoencodingEngine
+      params:
+        loss_config:
+          target: torch.nn.Identity
+
+        regularizer_config:
+          target: vwm.modules.autoencoding.regularizer.DiagonalGaussianRegularizer
+
+        encoder_config:
+          target: vwm.modules.diffusionmodules.model.Encoder
+          params:
+            attn_type: vanilla
+            z_channels: 4
+            resolution: 256
+            in_channels: 3
+            out_channels: 3
+            ch: 128
+            ch_mult: [ 1, 2, 4, 4 ]
+            num_res_blocks: 2
+            attn_resolutions: [ ]
+            dropout: 0.0
+
+        decoder_config:
+          target: vwm.modules.autoencoding.temporal_ae.VideoDecoder
+          params:
+            attn_type: vanilla
+            z_channels: 4
+            resolution: 256
+            in_channels: 3
+            out_channels: 3
+            ch: 128
+            ch_mult: [ 1, 2, 4, 4 ]
+            num_res_blocks: 2
+            attn_resolutions: [ ]
+            dropout: 0.0
+            video_kernel_size: [ 3, 1, 1 ]
