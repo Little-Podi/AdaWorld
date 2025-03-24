@@ -5,6 +5,8 @@
 
 [[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.xxxxx)]
 
+> [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://scholar.google.com/citations?user=WjUmtm0AAAAJ), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
+
 <hr style="border: 2px solid gray;"></hr>
 
 **TL;DR: AdaWorld is a highly adaptable world model trained with continuous latent actions, enabling efficient action transfer, world model adaptation, and visual planning.**
@@ -14,7 +16,7 @@
 ## TODO List
 
 - [ ] Provide detailed instructions to get started with this project.
-- [ ] Provide the source of our dataset.
+- [ ] Upload the source of our dataset.
 - [ ] Release model weights.
 
 ## Acknowledgement
