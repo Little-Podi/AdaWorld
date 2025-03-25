@@ -9,7 +9,7 @@ from torch import Tensor
 
 class LatentActionModel(nn.Module):
     """
-    Latent action VQ-VAE.
+    Latent action VAE.
     """
 
     def __init__(
