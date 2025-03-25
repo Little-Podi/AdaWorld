@@ -3,7 +3,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 
-[[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.xxxxx)]
+[[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.18938)]
 
 > [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://scholar.google.com/citations?user=WjUmtm0AAAAJ), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
@@ -47,7 +47,7 @@ If any parts of our paper and code help your research, please consider citing us
 @article{gao2025adaworld,
   title={AdaWorld: Learning Adaptable World Models with Latent Actions}, 
   author={Gao, Shenyuan and Zhou, Siyuan and Du, Yilun and Zhang, Jun and Gan, Chuang},
-  journal={arXiv preprint arXiv:2503.xxxxx},
+  journal={arXiv preprint arXiv:2503.18938},
   year={2025}
 }
 ```
