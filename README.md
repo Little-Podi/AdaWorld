@@ -9,9 +9,27 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-**TL;DR: AdaWorld is a highly adaptable world model trained with continuous latent actions, enabling efficient action transfer, world model adaptation, and visual planning.**
+**TL;DR:** *AdaWorld is a highly adaptable world model trained with continuous latent actions, enabling efficient action transfer, world model adaptation, and visual planning.*
+
+- Efficient action transfer (source video &rarr; target scene)
+
+<div id="top" align="center">
+<p align="center">
+<img src="assets/transfer.gif" width="1000px" >
+</p>
+</div>
+
+- Effective agent planning (action-agnostic vs. AdaWorld)
+
+<div id="top" align="center">
+<p align="center">
+<img src="assets/planning.gif" width="1000px" >
+</p>
+</div>
 
 ![](assets/teaser.png)
+
+We introduce latent actions as a unified condition for action-aware pretraining from videos. Our world model, dubbed AdaWorld, can readily transfer actions across contexts without training. By initializing action embeddings with corresponding latent actions, AdaWorld can also be adapted into specialized world models through limited interactions and finetuning steps.
 
 ## TODO List
 
