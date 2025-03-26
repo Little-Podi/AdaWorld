@@ -5,7 +5,7 @@
 
 [[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.18938)]
 
-> [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://scholar.google.com/citations?user=WjUmtm0AAAAJ), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
+> [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
 <hr style="border: 2px solid gray;"></hr>
 
@@ -39,7 +39,7 @@ We introduce latent actions as a unified condition for action-aware pretraining 
 
 ## Acknowledgement
 
-Our idea is implemented base on [Vista](https://github.com/OpenDriveLab/Vista) and [Jafar](https://github.com/flairox/jafar). Thanks for their great open-source work!
+Our idea is implemented based on [Vista](https://github.com/OpenDriveLab/Vista) and [Jafar](https://github.com/flairox/jafar). Thanks for their great open-source work!
 
 ## Citation
 If any parts of our paper and code help your research, please consider citing us and giving a star to our repository.
