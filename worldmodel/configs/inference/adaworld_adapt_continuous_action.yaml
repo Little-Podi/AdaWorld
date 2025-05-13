@@ -78,21 +78,12 @@ model:
                   loss_config:
                     target: torch.nn.Identity
 
-          - input_key: lam_inputs
+          - input_key: raw_action
             is_trainable: false
-            target: vwm.modules.encoders.modules.VideoPredictionEmbedderWithLAMEncoder
+            target: vwm.modules.encoders.modules.ActionMLP
             params:
-              lam_config:
-                target: external.lam.model.LAM
-                params:
-                  image_channels: 3
-                  lam_model_dim: 1024
-                  lam_latent_dim: 32
-                  lam_patch_size: 16
-                  lam_enc_blocks: 16
-                  lam_dec_blocks: 16
-                  lam_num_heads: 16
-                  ckpt_path: path_to/lam/epoch=99.ckpt
+              num_actions: 2
+              action_dim: 32
 
           - input_key: context_len
             is_trainable: false

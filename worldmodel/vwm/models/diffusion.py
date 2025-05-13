@@ -153,9 +153,9 @@ class DiffusionEngine(LightningModule):
         if self.use_ema:
             self.model_ema(self.model)
 
-    def on_train_epoch_start(self, *args, **kwargs) -> None:
-        if self.conditioner.embedders[2].lam.ckpt_path and "last" in self.conditioner.embedders[2].lam.ckpt_path:
-            self.conditioner.embedders[2].lam.reload_ckpt(self.conditioner.embedders[2].lam.ckpt_path)
+    # def on_train_epoch_start(self, *args, **kwargs) -> None:
+    #     if self.conditioner.embedders[2].lam.ckpt_path and "last" in self.conditioner.embedders[2].lam.ckpt_path:
+    #         self.conditioner.embedders[2].lam.reload_ckpt(self.conditioner.embedders[2].lam.ckpt_path)
 
     @contextmanager
     def ema_scope(self, context=None):

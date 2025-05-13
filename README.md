@@ -3,7 +3,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 
-🎬 [[Project Page](https://adaptable-world-model.github.io)], 📜 [[Technical Report](https://arxiv.org/abs/2503.18938)]
+🎬 [[Project Page](https://adaptable-world-model.github.io)], 📜 [[Technical Report](https://arxiv.org/abs/2503.18938)], 🤗 [[Model Weights](https://huggingface.co/Little-Podi/AdaWorld)] (both latent action autoencoder and the pretrained AdaWorld)
 
 [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
@@ -33,7 +33,7 @@
 
 We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
 
-## Getting Started
+## 🕹️ Getting Started
 
 - [Installation](https://github.com/Little-Podi/AdaWorld/blob/main/docs/INSTALLATION.md)
 - [Training](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRAINING.md)
@@ -42,11 +42,11 @@ We introduce latent actions as a unified condition for action-aware pretraining 
 - [Visual Planning](https://github.com/Little-Podi/AdaWorld/blob/main/docs/PLANNING.md)
 - [Trouble Shooting](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ISSUES.md)
 
-## Acknowledgement
+## ❤️ Acknowledgement
 
 Our idea is implemented based on [Vista](https://github.com/OpenDriveLab/Vista) and [Jafar](https://github.com/flairox/jafar). Thanks for their great open-source work!
 
-## Citation
+## ⭐ Citation
 If any parts of our paper and code help your research, please consider citing us and giving a star to our repository.
 ```
 @article{gao2025adaworld,
@@ -57,6 +57,6 @@ If any parts of our paper and code help your research, please consider citing us
 }
 ```
 
-## Contact
+## 📢 Contact
 
-If you have any questions or concerns, feel free to contact me through email (sygao@connect.ust.hk). Suggestions and collaborations are also highly welcome!
+If you have any questions or comments, feel free to contact me through email (sygao@connect.ust.hk). Suggestions and collaborations are also highly welcome!

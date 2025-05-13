@@ -345,6 +345,9 @@ class ActionMLP(AbstractEmbModel):  # For adaptation to continuous action space
             nn.Linear(action_dim, action_dim)
         )
 
+        init_weights = torch.load("path_to/mlp_init_weights.pth", map_location="cpu")["model_state_dict"]
+        missing, unexpected = self.load_state_dict(init_weights)
+
     def forward(self, x):
         assert len(x.shape) == 2
         z = self.mapping(x)

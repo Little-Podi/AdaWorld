@@ -121,7 +121,7 @@ class LightningDataset(LightningDataModule):
         )
 
 
-class Platformer2D(Dataset):
+class VideoDataset(Dataset):
     def __init__(
             self,
             split_path: str,
@@ -132,7 +132,7 @@ class Platformer2D(Dataset):
             output_format: str = "t h w c",
             color_aug: bool = True
     ) -> None:
-        super(Platformer2D, self).__init__()
+        super(VideoDataset, self).__init__()
         self.padding = padding
         self.randomize = randomize
         self.resolution = resolution
@@ -231,7 +231,7 @@ class Platformer2D(Dataset):
         return data_dict
 
 
-class OriginalPlatformer2D(Dataset):
+class OriginalVideoDataset(Dataset):
     def __init__(
             self,
             data_root: str,
@@ -244,7 +244,7 @@ class OriginalPlatformer2D(Dataset):
             output_format: str = "t h w c",
             color_aug: bool = True
     ) -> None:
-        super(OriginalPlatformer2D, self).__init__()
+        super(OriginalVideoDataset, self).__init__()
         self.padding = padding
         self.randomize = randomize
         self.resolution = resolution
@@ -401,7 +401,7 @@ class MultiSourceSamplerDataset(Dataset):
         self.subsets = []
         for folder in tqdm(folders, desc="Loading subsets..."):
             print("Subset:", folder.split("/")[-2])
-            self.subsets.append(Platformer2D(split_path=folder, color_aug=color_aug, **kwargs))
+            self.subsets.append(VideoDataset(split_path=folder, color_aug=color_aug, **kwargs))
         print("Number of subsets:", len(self.subsets))
 
         if sampling_strategy == "sample":
@@ -443,7 +443,7 @@ class MultiSourceSamplerDataset(Dataset):
         return sample_item
 
 
-class LightningPlatformer2D(LightningDataset):
+class LightningVideoDataset(LightningDataset):
     def __init__(
             self,
             data_root: str,
@@ -457,7 +457,7 @@ class LightningPlatformer2D(LightningDataset):
             sampling_strategy: str = "sample",
             **kwargs
     ) -> None:
-        super(LightningPlatformer2D, self).__init__(**kwargs)
+        super(LightningVideoDataset, self).__init__(**kwargs)
         self.data_root = data_root
         self.env_source = env_source
         self.padding = padding
@@ -498,7 +498,7 @@ class LightningPlatformer2D(LightningDataset):
                 color_aug=False
             )
         elif stage == "test":
-            self.test_dataset = OriginalPlatformer2D(
+            self.test_dataset = OriginalVideoDataset(
                 data_root=self.data_root,
                 env_source=self.env_source,
                 split="test",

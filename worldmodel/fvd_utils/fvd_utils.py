@@ -88,7 +88,7 @@ def cov(m, rowvar=False):
     if not rowvar and m.size(0) != 1:
         m = m.t()
 
-    fact = 1.0 / (m.size(1) - 1)  # unbiased estimate
+    fact = 1.0 / (m.size(1) - 1)  # Unbiased estimate
     m_center = m - torch.mean(m, dim=1, keepdim=True)
     mt = m_center.t()
     return fact * m_center.matmul(mt).squeeze()

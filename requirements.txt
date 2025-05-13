@@ -19,3 +19,4 @@ safetensors==0.5.1
 kornia==0.7.4
 open-clip-torch>=2.20.0
 scipy==1.14.1
+scikit-learn==1.6.1

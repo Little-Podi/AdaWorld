@@ -20,7 +20,7 @@ class LAM(LightningModule):
     def __init__(
             self,
             image_channels: int = 3,
-            # Latent action model
+            # Latent action autoencoder
             lam_model_dim: int = 512,
             lam_latent_dim: int = 32,
             lam_patch_size: int = 16,

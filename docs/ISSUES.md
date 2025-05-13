@@ -1,6 +1,6 @@
 # Trouble Shooting
 
-1. `TypeError: write_frames() got an unexpected keyword argument 'audio_path'` when sampling videos.
+1. `TypeError: write_frames() got an unexpected keyword argument 'audio_path'` when saving videos.
 
    - This is caused by the low version of `imageio-ffmpeg`.
    - Upgrade it to fix: `pip install --upgrade imageio-ffmpeg==0.4.8`.

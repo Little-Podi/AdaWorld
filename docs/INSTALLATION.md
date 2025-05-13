@@ -1,6 +1,6 @@
 # Installation
 
-## Environment
+### Environment
 
 We use conda to manage the environment. The installation is tested with CUDA 11.8 and NVIDIA A100 (80 GB).
 
@@ -10,7 +10,7 @@ conda activate adaworld
 pip install -r requirements.txt
 ```
 
-## Dataset
+### Dataset
 
 In this instruction, we provide our automated generation process on [Procgen](https://github.com/openai/procgen) and [Gym Retro](https://github.com/openai/retro) as examples.
 
@@ -19,13 +19,13 @@ For Gym Retro, we recommend installing an independent conda environment for auto
 Run the following scripts to sample videos using a biased random agent (may take a while). You can customize the number and length of the videos by modifying `num_logs` and `timeout`.
 
 ```shell
+mkdir data
 python sample_procgen.py
 python sample_retro.py
 python sample_stableretro.py
 ```
 
 The organized data directory should look like:
-
 ```
 data/
 |--procgen/
@@ -63,7 +63,6 @@ data/
 ```
 
 You can also download and compile other datasets we used:
-
 - [Open X-Embodiment](https://github.com/google-deepmind/open_x_embodiment)
   - We extract as many video sequences as possible regardless of their viewpoint.
   - Please find `download_open_x.sh` and `process_rtx.py` to see how we extract raw videos.
@@ -74,7 +73,6 @@ You can also download and compile other datasets we used:
   - You can download more if you want and have sufficient storage.
 
 or those not used (but we have tried):
-
 - [Panda-70M](https://github.com/snap-research/Panda-70M)
 - [Ego-Exo4D](https://github.com/facebookresearch/Ego4d)
 - [EPIC-KITCHENS](https://github.com/epic-kitchens/epic-kitchens-download-scripts)

@@ -1,9 +1,9 @@
-import json
 import math
 from os import listdir, path
 from random import choices, randint
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
+import ast
 import cv2 as cv
 import torch
 import torch.nn.functional as F
@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
 
-class Platformer2D(Dataset):
+class VideoDataset(Dataset):
     def __init__(
             self,
             split_path: str,
@@ -24,7 +24,7 @@ class Platformer2D(Dataset):
             output_format: str = "t c h w",
             color_aug: bool = True
     ):
-        super(Platformer2D, self).__init__()
+        super(VideoDataset, self).__init__()
         self.padding = padding
         self.randomize = randomize
         self.resolution = resolution
@@ -138,6 +138,226 @@ class Platformer2D(Dataset):
         return data_dict
 
 
+class VideoDatasetDiscreteActionSpace(Dataset):
+    def __init__(
+            self,
+            split_path: str,
+            randomize: bool = False,
+            resolution: int = 256,
+            n_context_frames: int = 5,
+            output_format: str = "t c h w",
+            color_aug: bool = True
+    ):
+        super(VideoDatasetDiscreteActionSpace, self).__init__()
+        self.randomize = randomize
+        self.resolution = resolution
+        self.n_context_frames = n_context_frames
+        self.output_format = output_format
+        self.color_aug = color_aug
+
+        # Get all the file path based on the split path
+        self.file_names = []
+        for file_name in listdir(split_path):
+            if file_name.endswith(".mp4") or file_name.endswith(".webm"):
+                self.file_names.append(path.join(split_path, file_name))
+
+    def __len__(self) -> int:
+        return len(self.file_names)
+
+    def __getitem__(self, idx: int) -> Dict:
+        video_path = self.file_names[idx]
+        while True:
+            try:
+                image_seq, raw_action = self.load_video_slice(
+                    video_path,
+                    self.n_context_frames + 1
+                )
+                return self.build_data_dict(image_seq, raw_action)
+            except:
+                idx = randint(0, len(self) - 1)
+                video_path = self.file_names[idx]
+
+    def load_video_slice(
+            self,
+            video_path: str,
+            num_frames: int
+    ) -> Tuple[List, torch.Tensor]:
+        cap = cv.VideoCapture(video_path)
+        total_frames = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+        assert num_frames == total_frames
+
+        frames = []
+        for _ in range(num_frames):
+            ret, frame = cap.read()
+            if ret:
+                # Frame was successfully read, parse it
+                frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                frame = torch.from_numpy(frame)
+                frames.append(frame)
+            else:
+                # Reach the end of video
+                raise NotImplementedError
+        cap.release()
+
+        video = torch.stack(frames) / 255.0
+
+        # Crop the video to be square
+        if video.shape[1] != video.shape[2]:
+            square_len = min(video.shape[1], video.shape[2])
+            h_crop = (video.shape[1] - square_len) // 2
+            w_crop = (video.shape[2] - square_len) // 2
+            video = video[:, h_crop:h_crop + square_len, w_crop:w_crop + square_len]
+
+        if video.shape[-2] != self.resolution or video.shape[-3] != self.resolution:
+            video = rearrange(video, "t h w c -> t c h w")
+            video = F.interpolate(video, self.resolution, mode="bicubic")
+            video = rearrange(video, f"t c h w -> {self.output_format}")
+        else:
+            video = rearrange(video, f"t h w c -> {self.output_format}")
+
+        if self.color_aug:
+            # Brightness jitter
+            video = (video + torch.rand(1) * 0.2 - 0.1).clamp(0, 1)
+
+        action_anno = video_path.split("action_")[1].split("/")[0]
+        raw_action = torch.Tensor([int(action_anno)])
+        return [frame for frame in video], raw_action
+
+    def build_data_dict(self, image_seq: List, raw_action: torch.Tensor) -> Dict:
+        context_len = choices(range(1, self.n_context_frames + 1))[0]
+        image_seq = image_seq[self.n_context_frames - context_len:]
+        filled_seq = [torch.zeros_like(image_seq[0])] * (self.n_context_frames - context_len) + image_seq
+        next_frames = torch.Tensor(filled_seq[self.n_context_frames])
+        prev_frames = torch.stack(filled_seq[:self.n_context_frames])
+        context_len = torch.Tensor([context_len])
+        next_frames = next_frames * 2.0 - 1.0
+        prev_frames = prev_frames * 2.0 - 1.0
+        context_aug = torch.Tensor(choices(range(8))) / 10
+        img_seq = torch.cat([prev_frames, next_frames[None]])
+        data_dict = {
+            "img_seq": img_seq,  # (T, 3, 256, 256)
+            "cond_frames_without_noise": prev_frames[-1],
+            "cond_frames": prev_frames[-1] + 0.02 * torch.randn_like(prev_frames[-1]),
+            "context_len": context_len,  # (1,)
+            "context_aug": context_aug,  # (1,)
+            "raw_action": raw_action
+        }
+        return data_dict
+
+
+class VideoDatasetContinuousActionSpace(Dataset):
+    def __init__(
+            self,
+            split_path: str,
+            randomize: bool = False,
+            resolution: int = 256,
+            n_context_frames: int = 5,
+            output_format: str = "t c h w",
+            color_aug: bool = True
+    ):
+        super(VideoDatasetContinuousActionSpace, self).__init__()
+        self.randomize = randomize
+        self.resolution = resolution
+        self.n_context_frames = n_context_frames
+        self.output_format = output_format
+        self.color_aug = color_aug
+
+        # Get all the file path based on the split path
+        self.file_names = []
+        self.actions = []
+        for file_name in listdir(split_path):
+            if file_name.endswith(".mp4") or file_name.endswith(".webm"):
+                self.file_names.append(path.join(split_path, file_name))
+
+                action_txt = file_name.replace(".mp4", ".txt")
+                action_file = open(path.join(split_path, action_txt), "r")
+                actions = action_file.read().splitlines()[0]
+                actions = ast.literal_eval(actions)
+                self.actions.append(actions)
+
+    def __len__(self) -> int:
+        return len(self.file_names)
+
+    def __getitem__(self, idx: int) -> Dict:
+        video_path = self.file_names[idx]
+        raw_action = self.actions[idx]
+        while True:
+            try:
+                image_seq = self.load_video_slice(
+                    video_path,
+                    self.n_context_frames + 1
+                )
+                return self.build_data_dict(image_seq, raw_action)
+            except:
+                idx = randint(0, len(self) - 1)
+                video_path = self.file_names[idx]
+                raw_action = self.actions[idx]
+
+    def load_video_slice(
+            self,
+            video_path: str,
+            num_frames: int
+    ) -> List:
+        cap = cv.VideoCapture(video_path)
+        total_frames = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+        assert num_frames == total_frames
+
+        frames = []
+        for _ in range(num_frames):
+            ret, frame = cap.read()
+            if ret:
+                # Frame was successfully read, parse it
+                frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                frame = torch.from_numpy(frame)
+                frames.append(frame)
+            else:
+                # Reach the end of video
+                raise NotImplementedError
+        cap.release()
+
+        video = torch.stack(frames) / 255.0
+
+        # Crop the video to be square
+        if video.shape[1] != video.shape[2]:
+            square_len = min(video.shape[1], video.shape[2])
+            h_crop = (video.shape[1] - square_len) // 2
+            w_crop = (video.shape[2] - square_len) // 2
+            video = video[:, h_crop:h_crop + square_len, w_crop:w_crop + square_len]
+
+        if video.shape[-2] != self.resolution or video.shape[-3] != self.resolution:
+            video = rearrange(video, "t h w c -> t c h w")
+            video = F.interpolate(video, self.resolution, mode="bicubic")
+            video = rearrange(video, f"t c h w -> {self.output_format}")
+        else:
+            video = rearrange(video, f"t h w c -> {self.output_format}")
+
+        if self.color_aug:
+            # Brightness jitter
+            video = (video + torch.rand(1) * 0.2 - 0.1).clamp(0, 1)
+        return [frame for frame in video]
+
+    def build_data_dict(self, image_seq: List, raw_action: List) -> Dict:
+        context_len = choices(range(1, self.n_context_frames + 1))[0]
+        image_seq = image_seq[self.n_context_frames - context_len:]
+        filled_seq = [torch.zeros_like(image_seq[0])] * (self.n_context_frames - context_len) + image_seq
+        next_frames = torch.Tensor(filled_seq[self.n_context_frames])
+        prev_frames = torch.stack(filled_seq[:self.n_context_frames])
+        context_len = torch.Tensor([context_len])
+        next_frames = next_frames * 2.0 - 1.0
+        prev_frames = prev_frames * 2.0 - 1.0
+        context_aug = torch.Tensor(choices(range(8))) / 10
+        img_seq = torch.cat([prev_frames, next_frames[None]])
+        data_dict = {
+            "img_seq": img_seq,  # (T, 3, 256, 256)
+            "cond_frames_without_noise": prev_frames[-1],
+            "cond_frames": prev_frames[-1] + 0.02 * torch.randn_like(prev_frames[-1]),
+            "context_len": context_len,  # (1,)
+            "context_aug": context_aug,  # (1,)
+            "raw_action": torch.Tensor(raw_action)
+        }
+        return data_dict
+
+
 class MultiSourceSamplerDataset(Dataset):
     def __init__(
             self,
@@ -171,7 +391,7 @@ class MultiSourceSamplerDataset(Dataset):
         self.subsets = []
         for folder in tqdm(folders, desc="Loading subsets..."):
             print("Subset:", folder.split("/")[-2])
-            self.subsets.append(Platformer2D(split_path=folder, **kwargs))
+            self.subsets.append(VideoDataset(split_path=folder, **kwargs))
         print("Number of subsets:", len(self.subsets))
 
         if sampling_strategy == "sample":

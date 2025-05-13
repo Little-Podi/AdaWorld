@@ -1,10 +1,10 @@
 from lightning.pytorch.cli import LightningCLI
 
-from lam.dataset import LightningPlatformer2D
+from lam.dataset import LightningVideoDataset
 from lam.model import LAM
 
 cli = LightningCLI(
     LAM,
-    LightningPlatformer2D,
+    LightningVideoDataset,
     seed_everything_default=32
 )

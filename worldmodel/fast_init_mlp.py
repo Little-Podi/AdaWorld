@@ -18,7 +18,7 @@ class ActionMLP(nn.Module):
         return z
 
 
-def save_checkpoint(model, optimizer, epoch, loss, filename="checkpoint.pth"):
+def save_checkpoint(model, optimizer, epoch, loss, filename="mlp_init_weights.pth"):
     checkpoint = {
         "epoch": epoch,
         "model_state_dict": model.state_dict(),
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     num_actions = 2  # nuScenes [x, y] displacement
     action_dim = 32
 
-    inputs = torch.load("path_to/nusc_action_labels.pt").float()
+    inputs = torch.load("path_to/raw_action_inputs.pt").float()
     targets = torch.load("path_to/latent_action_stats.pt").float()
 
     dataset = torch.utils.data.TensorDataset(inputs, targets)

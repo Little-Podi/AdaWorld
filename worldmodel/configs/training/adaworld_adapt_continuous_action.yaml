@@ -1,11 +1,12 @@
 model:
+  base_learning_rate: 5.e-5
   target: vwm.models.diffusion.DiffusionEngine
   params:
-    use_ema: false
+    use_ema: true
     input_key: img_seq
     scale_factor: 0.18215
     disable_first_stage_autocast: true
-    en_and_decode_n_samples_a_time: 7
+    en_and_decode_n_samples_a_time: 1
     n_context_frames: &n_context_frames 6
 
     denoiser_config:
@@ -43,6 +44,7 @@ model:
         emb_models:
           - input_key: cond_frames_without_noise
             is_trainable: false
+            ucg_rate: 0.1
             target: vwm.modules.encoders.modules.FrozenOpenCLIPImagePredictionEmbedder
             params:
               open_clip_config:
@@ -52,6 +54,7 @@ model:
 
           - input_key: cond_frames
             is_trainable: false
+            ucg_rate: 0.1
             target: vwm.modules.encoders.modules.VideoPredictionEmbedderWithEncoder
             params:
               disable_encoder_autocast: true
@@ -78,30 +81,24 @@ model:
                   loss_config:
                     target: torch.nn.Identity
 
-          - input_key: lam_inputs
-            is_trainable: false
-            target: vwm.modules.encoders.modules.VideoPredictionEmbedderWithLAMEncoder
+          - input_key: raw_action
+            is_trainable: true
+            ucg_rate: 0.1
+            target: vwm.modules.encoders.modules.ActionMLP
             params:
-              lam_config:
-                target: external.lam.model.LAM
-                params:
-                  image_channels: 3
-                  lam_model_dim: 1024
-                  lam_latent_dim: 32
-                  lam_patch_size: 16
-                  lam_enc_blocks: 16
-                  lam_dec_blocks: 16
-                  lam_num_heads: 16
-                  ckpt_path: path_to/lam/epoch=99.ckpt
+              num_actions: 2
+              action_dim: 32
 
           - input_key: context_len
             is_trainable: false
+            ucg_rate: 0.1
             target: vwm.modules.encoders.modules.ConcatTimestepEmbedderND
             params:
               output_dim: 256
 
           - input_key: context_aug
             is_trainable: false
+            ucg_rate: 0.1
             target: vwm.modules.encoders.modules.ConcatTimestepEmbedderND
             params:
               output_dim: 256
@@ -143,3 +140,78 @@ model:
             attn_resolutions: [ ]
             dropout: 0.0
             video_kernel_size: [ 3, 1, 1 ]
+
+    scheduler_config:
+      target: vwm.lr_scheduler.LambdaLinearScheduler
+      params:
+        warm_up_steps: [ 100 ]
+        cycle_lengths: [ 1000000000000 ]
+        f_start: [ 1.e-6 ]
+        f_max: [ 1. ]
+        f_min: [ 1. ]
+
+    loss_fn_config:
+      target: vwm.modules.diffusionmodules.loss.StandardDiffusionLoss
+      params:
+        n_context_frames: *n_context_frames
+
+        sigma_sampler_config:
+          target: vwm.modules.diffusionmodules.sigma_sampling.EDMSampling
+          params:
+            p_mean: 1.0
+            p_std: 1.6
+
+        loss_weighting_config:
+          target: vwm.modules.diffusionmodules.loss_weighting.VWeighting
+
+    sampler_config:
+      target: vwm.modules.diffusionmodules.sampling.EulerEDMSampler
+      params:
+        num_steps: 5
+        n_context_frames: *n_context_frames
+
+        discretization_config:
+          target: vwm.modules.diffusionmodules.discretizer.EDMDiscretization
+          params:
+            sigma_max: 700.0
+
+        guider_config:
+          target: vwm.modules.diffusionmodules.guiders.VanillaCFG
+          params:
+            scale: 1.25
+
+data:
+  target: vwm.data.dataset.VideoDataSampler
+  params:
+    data_root: ../data
+    env_source: nusc
+    batch_size: 4
+    num_workers: 16
+    resolution: 256
+    n_context_frames: *n_context_frames
+    samples_per_epoch: 6400
+
+lightning:
+  callbacks:
+    image_logger:
+      target: train.ImageLogger
+      params:
+        disabled: false
+        enable_autocast: false
+        batch_frequency: 100
+        increase_log_steps: true
+        log_first_step: false
+        n_context_frames: *n_context_frames
+
+  modelcheckpoint:
+    params:
+      every_n_epochs: 1
+
+  trainer:
+    devices: 0,1
+    benchmark: true
+    num_sanity_val_steps: 0
+    accumulate_grad_batches: 1
+    max_epochs: 5
+    strategy: deepspeed_stage_2
+    gradient_clip_val: 0.3
