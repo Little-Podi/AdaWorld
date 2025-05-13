@@ -175,7 +175,8 @@ class FrozenOpenCLIPImageEmbedder(AbstractEmbModel):
     def __init__(
             self,
             arch="ViT-H-14",
-            version="path_to/huggingface/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/open_clip_pytorch_model.bin",
+            # version="path_to/huggingface/laion/CLIP-ViT-H-14-laion2B-s32B-b79K/open_clip_pytorch_model.bin",
+            version="laion2b_s32b_b79k",
             device="cuda",
             max_length=77,
             freeze=True,
@@ -312,6 +313,42 @@ class FrozenOpenCLIPImageEmbedder(AbstractEmbModel):
             return x, tokens
         else:
             return x
+
+
+class ActionBook(AbstractEmbModel):  # For adaptation to discrete action space
+    def __init__(self, num_actions: int = 4, action_dim: int = 32):
+        super(ActionBook, self).__init__()
+        self.codebook = nn.Embedding(num_actions, action_dim)
+        self.codebook.weight.data.uniform_(-1.0 / num_actions, 1.0 / num_actions)
+
+        # action_0_embed = torch.load("path_to/action_emb_init_0.pt", map_location="cpu")
+        # action_1_embed = torch.load("path_to/action_emb_init_1.pt", map_location="cpu")
+        # action_2_embed = torch.load("path_to/action_emb_init_2.pt", map_location="cpu")
+        # init_embed = torch.stack([action_0_embed.mean(dim=0), action_1_embed.mean(dim=0), action_2_embed.mean(dim=0)])
+        # self.codebook.weight.data = init_embed
+
+    def forward(self, x):
+        if x.ndim == 1:
+            x = x[:, None]
+        assert len(x.shape) == 2
+        indices = x.to(torch.int64)
+        z = self.codebook(indices)
+        return [z, z.squeeze(1)]  # crossattn (32), vector (32)
+
+
+class ActionMLP(AbstractEmbModel):  # For adaptation to continuous action space
+    def __init__(self, num_actions: int = 4, action_dim: int = 32):
+        super(ActionMLP, self).__init__()
+        self.mapping = nn.Sequential(
+            nn.Linear(num_actions, action_dim),
+            nn.SiLU(),
+            nn.Linear(action_dim, action_dim)
+        )
+
+    def forward(self, x):
+        assert len(x.shape) == 2
+        z = self.mapping(x)
+        return [z.unsqueeze(1), z]  # crossattn (32), vector (32)
 
 
 class VideoPredictionEmbedderWithLAMEncoder(AbstractEmbModel):

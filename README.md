@@ -36,15 +36,10 @@ We introduce latent actions as a unified condition for action-aware pretraining 
 ## Getting Started
 
 - [Installation](https://github.com/Little-Podi/AdaWorld/blob/main/docs/INSTALLATION.md)
-
 - [Training](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRAINING.md)
-
 - [Action Transfer](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRANSFER.md)
-
 - [World Model Adaptation](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ADAPTATION.md)
-
 - [Visual Planning](https://github.com/Little-Podi/AdaWorld/blob/main/docs/PLANNING.md)
-
 - [Trouble Shooting](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ISSUES.md)
 
 ## Acknowledgement
