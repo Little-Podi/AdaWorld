@@ -1,5 +1,6 @@
 # Learning Adaptable World Models with Latent Actions
 
+[![HF Models](https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow?style=for-the-badge)](https://huggingface.co/Little-Podi/AdaWorld)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 
