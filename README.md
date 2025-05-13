@@ -5,13 +5,13 @@
 
 [[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.18938)]
 
-> [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
+[Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
 <hr style="border: 2px solid gray;"></hr>
 
-**TL;DR:** *AdaWorld is a highly adaptable world model trained with continuous latent actions, enabling efficient action transfer, world model adaptation, and visual planning.*
+**TL;DR:** *We pretrain AdaWorld with continuous latent actions from thousands of environments, making it highly efficient for action transfer, world model adaptation, and visual planning, even with minimal interactions and finetuning steps.*
 
-- Efficient action transfer (source video &rarr; target scene)
+- Action transfer (source video &rarr; target scene)
 
 <div id="top" align="center">
 <p align="center">
@@ -19,7 +19,7 @@
 </p>
 </div>
 
-- Effective agent planning (action-agnostic vs. AdaWorld)
+- Visual planning (action-agnostic vs. AdaWorld)
 
 <div id="top" align="center">
 <p align="center">
@@ -27,15 +27,21 @@
 </p>
 </div>
 
+<hr style="border: 2px solid gray;"></hr>
+
 ![](assets/teaser.png)
 
-We introduce latent actions as a unified condition for action-aware pretraining from videos. Our world model, dubbed AdaWorld, can readily transfer actions across contexts without training. By initializing action embeddings with corresponding latent actions, AdaWorld can also be adapted into specialized world models through limited interactions and finetuning steps.
+We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
 
-## TODO List
+## Getting Started
 
-- [ ] Provide detailed instructions to get started with this project.
-- [ ] Upload the source of our dataset.
-- [ ] Release model weights.
+- Installation
+
+- Training
+
+- Action Transfer
+
+- World Model Adaptation
 
 ## Acknowledgement
 

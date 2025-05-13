@@ -1,7 +1,9 @@
 import math
+from typing import Tuple
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from einops import rearrange
 from lam.modules.embeddings import RotaryEmbedding
 from torch import Tensor
@@ -236,3 +238,108 @@ class SpatioTemporalTransformer(nn.Module):
             x = block(x, self.causal_temporal)
         x = self.out(x)
         return x  # (B, T, E)
+
+
+class VectorQuantizer(nn.Module):
+    def __init__(self, num_latents: int, latent_dim: int, code_restart: bool = False, use_ema: bool = False) -> None:
+        super(VectorQuantizer, self).__init__()
+        self.codebook = nn.Embedding(num_latents, latent_dim)
+        self.codebook.weight.data.uniform_(-1.0 / num_latents, 1.0 / num_latents)
+
+        # Initialize a usage buffer
+        self.register_buffer("usage", torch.zeros(num_latents), persistent=False)
+        self.num_latents = num_latents
+
+        self.code_restart = code_restart
+
+        self.use_ema = use_ema
+        if use_ema:
+            self.register_buffer("ema_count", torch.zeros(num_latents), persistent=False)
+            self.register_buffer("ema_weight", self.codebook.weight.clone().detach().data, persistent=False)
+            self.ema_decay = 0.9999
+            self.epsilon = 1e-5
+
+    def update_usage(self, min_enc) -> None:
+        for idx in min_enc:
+            self.usage[idx] = self.usage[idx] + 1  # Add used code
+
+    def random_restart(self) -> None:
+        if self.code_restart:
+            # Randomly restart all dead codes
+            dead_codes = torch.nonzero(self.usage < 1).squeeze(1)
+            rand_codes = torch.randperm(self.num_latents)[0:len(dead_codes)]
+            print(f"Restarting {len(dead_codes)} codes")
+            with torch.no_grad():
+                self.codebook.weight[dead_codes] = self.codebook.weight[rand_codes]
+
+            if hasattr(self, "inner_vq"):
+                self.inner_vq.random_restart()
+
+    def reset_usage(self) -> None:
+        if self.code_restart:
+            # Reset usage between epochs
+            self.usage.zero_()
+
+            if hasattr(self, "inner_vq"):
+                self.inner_vq.reset_usage()
+
+    def forward(self, x: Tensor, delta_psnr: bool = False) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
+        # Compute distances
+        distance = torch.cdist(x, self.codebook.weight)
+
+        # Get indices and embeddings
+        indices = torch.argmin(distance, dim=1)
+        if delta_psnr:
+            shape = indices.shape
+            rand_indices = torch.randint(0, self.num_latents, shape).to(distance.device)
+            while torch.any(rand_indices == indices):
+                new_indices = torch.randint(0, self.num_latents, shape).to(distance.device)
+                rand_indices = torch.where(rand_indices == indices, new_indices, rand_indices)
+            z = self.codebook(rand_indices)
+        else:
+            z = self.codebook(indices)
+
+        # Update code usage
+        if not self.training or self.code_restart:
+            self.update_usage(indices)
+
+        # Update EMA weights
+        if self.training and self.use_ema:
+            encodings = F.one_hot(indices, self.num_latents).float()
+            self.ema_count = self.ema_decay * self.ema_count + (1 - self.ema_decay) * torch.sum(encodings, dim=0)
+            n = torch.sum(self.ema_count, dim=-1, keepdim=True)
+            self.ema_count = (self.ema_count + self.epsilon) / (n + self.num_latents * self.epsilon) * n
+            dw = torch.matmul(encodings.T, x.detach())
+            self.ema_weight = self.ema_decay * self.ema_weight + (1 - self.ema_decay) * dw
+            self.codebook.weight.data = self.ema_weight / self.ema_count.unsqueeze(-1)
+
+        # Straight through estimator
+        z_q = x + (z - x).detach()
+        return z_q, z, x, indices
+
+
+class ResidualVectorQuantizer(VectorQuantizer):
+    def __init__(self, num_latents: int, latent_dim: int) -> None:
+        super(ResidualVectorQuantizer, self).__init__(num_latents, latent_dim)
+        self.inner_vq = VectorQuantizer(num_latents, latent_dim)
+
+    def forward(self, x: Tensor) -> Tuple[Tensor, Tensor, Tensor, Tensor, Tensor, Tensor, Tensor]:
+        # Compute distances
+        distance = torch.cdist(x, self.codebook.weight)
+
+        # Get indices and embeddings
+        indices = torch.argmin(distance, dim=1)
+        z = self.codebook(indices)
+
+        # Residual quantization
+        residual = x - z.detach()
+        inner_z_q, inner_z, inner_x, inner_indices = self.inner_vq(residual)
+
+        # Update code usage
+        if not self.training or self.code_restart:
+            self.update_usage(indices)
+            self.inner_vq.update_usage(inner_indices)
+
+        # Straight through estimator
+        z_q = x + (z - x).detach()
+        return z_q + inner_z_q, z, x, indices, inner_z, inner_x, inner_indices

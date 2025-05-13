@@ -163,53 +163,17 @@ class MultiSourceSamplerDataset(Dataset):
 
         # Create all subsets
         folders = []
-        if env_source == "libero":
-            folders.append(path.join(data_root, "libero", split))
-        elif env_source == "human":
-            folders.append(path.join(data_root, "ssv2", split))
-            folders.append(path.join(data_root, "ego4d", split))
-        elif env_source == "robot":
-            for env in listdir(path.join(data_root, "openx")):
-                folders.append(path.join(data_root, "openx", env, split))
-        elif env_source == "embodied":
-            folders.append(path.join(data_root, "ssv2", split))
-            folders.append(path.join(data_root, "ego4d", split))
-            for env in listdir(path.join(data_root, "openx")):
-                folders.append(path.join(data_root, "openx", env, split))
-        elif env_source == "procgen":
+        if env_source == "procgen":
             for env in listdir(path.join(data_root, "procgen")):
                 folders.append(path.join(data_root, "procgen", env, split))
         elif env_source == "retro":
             for env in listdir(path.join(data_root, "retro")):
                 folders.append(path.join(data_root, "retro", env, split))
-            for env in listdir(path.join(data_root, "stableretro")):
-                folders.append(path.join(data_root, "stableretro", env, split))
         elif env_source == "game":
             for env in listdir(path.join(data_root, "procgen")):
                 folders.append(path.join(data_root, "procgen", env, split))
             for env in listdir(path.join(data_root, "retro")):
                 folders.append(path.join(data_root, "retro", env, split))
-            for env in listdir(path.join(data_root, "stableretro")):
-                folders.append(path.join(data_root, "stableretro", env, split))
-        elif env_source == "open":
-            for env in listdir(path.join(data_root, "procgen")):
-                folders.append(path.join(data_root, "procgen", env, split))
-            for env in listdir(path.join(data_root, "retro")):
-                folders.append(path.join(data_root, "retro", env, split))
-            for env in listdir(path.join(data_root, "stableretro")):
-                folders.append(path.join(data_root, "stableretro", env, split))
-            folders.append(path.join(data_root, "ssv2", split))
-            folders.append(path.join(data_root, "ego4d", split))
-            for env in listdir(path.join(data_root, "mira360")):
-                folders.append(path.join(data_root, "mira360", env, split))
-            for env in listdir(path.join(data_root, "openx")):
-                folders.append(path.join(data_root, "openx", env, split))
-        elif path.exists(path.join(data_root, "procgen", env_source, split)):
-            folders.append(path.join(data_root, "procgen", env_source, split))
-        elif path.exists(path.join(data_root, "retro", env_source, split)):
-            folders.append(path.join(data_root, "retro", env_source, split))
-        elif path.exists(path.join(data_root, "stableretro", env_source, split)):
-            folders.append(path.join(data_root, "stableretro", env_source, split))
         else:
             raise ValueError(f"Invalid source: {env_source}")
         self.subsets = []

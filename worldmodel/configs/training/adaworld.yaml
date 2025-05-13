@@ -193,7 +193,7 @@ data:
   target: vwm.data.dataset.VideoDataSampler
   params:
     data_root: ../data
-    env_source: open
+    env_source: game
     batch_size: 4
     num_workers: 16
     resolution: 256
