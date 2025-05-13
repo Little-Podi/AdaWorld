@@ -30,6 +30,7 @@ After training, you can convert the checkpoint to safetensors format using `worl
 
 > [!TIP]
 > Remember to modify `num_nodes` and `devices` in `lam/config/lam.yaml` accordingly if you have a different GPU setup.
+> 
 > Remember to set `max_epochs` or stop the training when you think the training is long enough.
 
 ---

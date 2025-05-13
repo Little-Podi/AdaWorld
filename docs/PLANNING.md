@@ -4,7 +4,10 @@ After efficient adaptation, AdaWorld can be controlled directly by raw action in
 
 > [!TIP]
 > Use [Hugging Face](https://huggingface.co/datasets/s-tian/VP2) to download the VP2 dataset. It will be much faster than the older links.
-> For Robosuite, we only require `5k_slice_rendered_256.hdf5`. For RoboDesk, you can use the scripted policies to generate the training trajectories locally if the download feels too slow.
+> 
+> For Robosuite, you only require `5k_slice_rendered_256.hdf5`.
+> 
+> For RoboDesk, you can use the scripted policies to generate the training trajectories locally if the download feels too slow.
 
 ---
 

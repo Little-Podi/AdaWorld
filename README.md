@@ -3,7 +3,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 
-🎬 [[Project Page](https://adaptable-world-model.github.io)], 📜 [[Technical Report](https://arxiv.org/abs/2503.18938)], 🤗 [[Model Weights](https://huggingface.co/Little-Podi/AdaWorld)] (both latent action autoencoder and the pretrained AdaWorld)
+🎬 [[Project Page](https://adaptable-world-model.github.io)], 📜 [[Technical Report](https://arxiv.org/abs/2503.18938)], 🤗 [[Model Weights](https://huggingface.co/Little-Podi/AdaWorld)]
 
 [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
