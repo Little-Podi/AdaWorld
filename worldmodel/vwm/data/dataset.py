@@ -34,20 +34,9 @@ class Platformer2D(Dataset):
 
         # Get all the file path based on the split path
         self.file_names = []
-        preload_file = f"../preload_json/{split_path.split('/')[-3]}-{split_path.split('/')[-2]}.json"
-        if path.exists(preload_file):
-            print("Preloaded!")
-            with open(preload_file, "r") as preload_json:
-                preload_sample = json.load(preload_json)
-            for file_name in preload_sample["file_names"]:
+        for file_name in listdir(split_path):
+            if file_name.endswith(".mp4") or file_name.endswith(".webm"):
                 self.file_names.append(path.join(split_path, file_name))
-        else:
-            for file_name in listdir(split_path):
-                if file_name.endswith(".mp4") or file_name.endswith(".webm"):
-                    self.file_names.append(path.join(split_path, file_name))
-
-        if "ssv2" in split_path or "ego4d" in split_path or "mira" in split_path:
-            self.file_names = self.file_names * 10
 
     def __len__(self) -> int:
         return len(self.file_names)
@@ -174,6 +163,9 @@ class MultiSourceSamplerDataset(Dataset):
                 folders.append(path.join(data_root, "procgen", env, split))
             for env in listdir(path.join(data_root, "retro")):
                 folders.append(path.join(data_root, "retro", env, split))
+        elif env_source == "robot":
+            for env in listdir(path.join(data_root, "openx")):
+                folders.append(path.join(data_root, "openx", env, split))
         else:
             raise ValueError(f"Invalid source: {env_source}")
         self.subsets = []

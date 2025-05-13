@@ -11,7 +11,7 @@ from sample_utils import *
 
 SAVE_PATH = "outputs/demo/"
 CONFIG = "configs/inference/adaworld.yaml"
-CKPT = "path_to/pytorch_model.bin"
+CKPT = "path_to/adaworld.safetensors"
 
 RESOLUTION = 256
 AUG_LEVEL = 0.1

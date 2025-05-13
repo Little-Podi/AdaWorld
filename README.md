@@ -3,7 +3,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 
-[[Project Page](https://adaptable-world-model.github.io)] [[Technical Report](https://arxiv.org/abs/2503.18938)]
+🎬 [[Project Page](https://adaptable-world-model.github.io)], 📜 [[Technical Report](https://arxiv.org/abs/2503.18938)]
 
 [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
 
@@ -35,13 +35,17 @@ We introduce latent actions as a unified condition for action-aware pretraining 
 
 ## Getting Started
 
-- Installation
+- [Installation](https://github.com/Little-Podi/AdaWorld/blob/main/docs/INSTALLATION.md)
 
-- Training
+- [Training](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRAINING.md)
 
-- Action Transfer
+- [Action Transfer](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRANSFER.md)
 
-- World Model Adaptation
+- [World Model Adaptation](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ADAPTATION.md)
+
+- [Visual Planning](https://github.com/Little-Podi/AdaWorld/blob/main/docs/PLANNING.md)
+
+- [Trouble Shooting](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ISSUES.md)
 
 ## Acknowledgement
 

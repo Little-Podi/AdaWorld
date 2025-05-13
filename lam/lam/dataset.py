@@ -265,6 +265,9 @@ class OriginalPlatformer2D(Dataset):
                 folders.append(path.join(data_root, "procgen", env, split))
             for env in listdir(path.join(data_root, "retro")):
                 folders.append(path.join(data_root, "retro", env, split))
+        elif env_source == "robot":
+            for env in listdir(path.join(data_root, "openx")):
+                folders.append(path.join(data_root, "openx", env, split))
         elif path.exists(path.join(data_root, env_source, split)):
             folders.append(path.join(data_root, env_source, split))
         else:
@@ -388,6 +391,9 @@ class MultiSourceSamplerDataset(Dataset):
                 folders.append(path.join(data_root, "procgen", env, split))
             for env in listdir(path.join(data_root, "retro")):
                 folders.append(path.join(data_root, "retro", env, split))
+        elif env_source == "robot":
+            for env in listdir(path.join(data_root, "openx")):
+                folders.append(path.join(data_root, "openx", env, split))
         elif path.exists(path.join(data_root, env_source, split)):
             folders.append(path.join(data_root, env_source, split))
         else:

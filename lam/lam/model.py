@@ -152,8 +152,10 @@ class LAM(LightningModule):
             pass
 
     # def on_test_epoch_end(self) -> None:
+    #     # For init specialized world models
     #     torch.save(self.lam.mu_record, f"latent_action_stats.pt")
     #
+    #     # For action creation as generative interactive environments
     #     cluster_ids, cluster_centers = kmeans(
     #         X=self.lam.mu_record,
     #         num_clusters=8,
