@@ -23,7 +23,9 @@ cd worldmodel
 run_train.sh
 ```
 
-After training, you can convert the checkpoint to safetensors format using `worldmodel/bin_to_st.py` and do inference.
+After training:
+1. Convert the DeepSpeed checkpoints (depends on how many GPUs you have) to `pytorch_model.bin` using `zero_to_fp32.py`.
+2. Convert `pytorch_model.bin` to safetensors format using `worldmodel/bin_to_st.py` and do inference.
 
 > [!NOTE]
 > The pretrained AdaWorld can be found at [Hugging Face](https://huggingface.co/Little-Podi/AdaWorld/blob/main/adaworld.safetensors).
