@@ -2,7 +2,7 @@
 
 ### Environment
 
-We use conda to manage the environment. The installation is tested with CUDA 11.8 and NVIDIA A100 (80 GB).
+We use conda to manage the environment. The installation is tested with CUDA 11.8 and NVIDIA A100 (80GB).
 
 ```shell
 conda create -n adaworld python=3.10 -y
