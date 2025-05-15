@@ -30,7 +30,7 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-![](assets/teaser.png)
+![](assets/teaser.jpg)
 
 We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
 
