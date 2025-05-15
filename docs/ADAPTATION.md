@@ -44,6 +44,8 @@ In our paper, we borrow the mini DMLab and Minecraft datasets from [Diffusion Fo
 6. Use `worldmodel/fast_init_mlp.py` to optimize the initialization weights `mlp_init_weights.pth` for ActionMLP in `worldmodel/vwm/modules/encoders/modules.py`. An example is provided in `__init__`.
 7. Run `worldmodel/run_adaptation_continuous.sh`.
 
+To visualize the UMAP projection of latent actions in our paper, please refer to [UMAP](https://github.com/lmcinnes/umap) and set `n_neighbors` and `min_dist` to 15 and 0.5, respectively.
+
 ---
 
 <= Previous: [[Action Transfer](https://github.com/Little-Podi/AdaWorld/blob/main/docs/TRANSFER.md)]

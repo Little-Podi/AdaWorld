@@ -1,6 +1,6 @@
 # Visual Planning
 
-After efficient adaptation, AdaWorld can be controlled directly by raw action inputs, which enables visual planning. Please refer to the setup of [iVideoGPT](https://github.com/thuml/iVideoGPT/tree/main/vp) to compile our world model and perform robot planning tasks on the [VP2](https://github.com/s-tian/vp2) benchmark.
+After efficient adaptation, AdaWorld can be controlled directly by raw action inputs, which enables visual planning. Please follow the setup of [iVideoGPT](https://github.com/thuml/iVideoGPT/tree/main/vp) to compile our world model and perform robot planning tasks on the [VP2](https://github.com/s-tian/vp2) benchmark.
 
 > [!TIP]
 > Use [Hugging Face](https://huggingface.co/datasets/s-tian/VP2) to download the VP2 dataset. It will be much faster than the older links.
