@@ -241,7 +241,7 @@ class SpatioTemporalTransformer(nn.Module):
 
 
 class VectorQuantizer(nn.Module):
-    def __init__(self, num_latents: int, latent_dim: int, code_restart: bool = False, use_ema: bool = False) -> None:
+    def __init__(self, num_latents: int, latent_dim: int, code_restart: bool = False) -> None:
         super(VectorQuantizer, self).__init__()
         self.codebook = nn.Embedding(num_latents, latent_dim)
         self.codebook.weight.data.uniform_(-1.0 / num_latents, 1.0 / num_latents)
@@ -251,13 +251,6 @@ class VectorQuantizer(nn.Module):
         self.num_latents = num_latents
 
         self.code_restart = code_restart
-
-        self.use_ema = use_ema
-        if use_ema:
-            self.register_buffer("ema_count", torch.zeros(num_latents), persistent=False)
-            self.register_buffer("ema_weight", self.codebook.weight.clone().detach().data, persistent=False)
-            self.ema_decay = 0.9999
-            self.epsilon = 1e-5
 
     def update_usage(self, min_enc) -> None:
         for idx in min_enc:
@@ -302,16 +295,6 @@ class VectorQuantizer(nn.Module):
         # Update code usage
         if not self.training or self.code_restart:
             self.update_usage(indices)
-
-        # Update EMA weights
-        if self.training and self.use_ema:
-            encodings = F.one_hot(indices, self.num_latents).float()
-            self.ema_count = self.ema_decay * self.ema_count + (1 - self.ema_decay) * torch.sum(encodings, dim=0)
-            n = torch.sum(self.ema_count, dim=-1, keepdim=True)
-            self.ema_count = (self.ema_count + self.epsilon) / (n + self.num_latents * self.epsilon) * n
-            dw = torch.matmul(encodings.T, x.detach())
-            self.ema_weight = self.ema_decay * self.ema_weight + (1 - self.ema_decay) * dw
-            self.codebook.weight.data = self.ema_weight / self.ema_count.unsqueeze(-1)
 
         # Straight through estimator
         z_q = x + (z - x).detach()
