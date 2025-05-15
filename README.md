@@ -10,7 +10,7 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-**TL;DR:** *We pretrain AdaWorld with continuous latent actions from thousands of environments, making it highly efficient for action transfer, world model adaptation, and visual planning, even with minimal interactions and finetuning steps.*
+**TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling efficient action transfer, adaptation, and planning with minimal finetuning.*
 
 - Action transfer (source video &rarr; target scene)
 
