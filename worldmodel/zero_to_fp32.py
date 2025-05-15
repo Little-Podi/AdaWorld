@@ -13,20 +13,19 @@
 # example: python zero_to_fp32.py . pytorch_model.bin
 
 import argparse
-import torch
 import glob
 import math
 import os
 import re
+import torch
 from collections import OrderedDict
 from dataclasses import dataclass
-
-# While this script doesn't use deepspeed to recover data, since the checkpoints are pickled with
-# DeepSpeed data structures it has to be available in the current python environment
-from deepspeed.utils import logger
 from deepspeed.checkpoint.constants import (DS_VERSION, OPTIMIZER_STATE_DICT, SINGLE_PARTITION_OF_FP32_GROUPS,
                                             FP32_FLAT_GROUPS, ZERO_STAGE, PARTITION_COUNT, PARAM_SHAPES, BUFFER_NAMES,
                                             FROZEN_PARAM_SHAPES, FROZEN_PARAM_FRAGMENTS)
+# While this script doesn't use deepspeed to recover data, since the checkpoints are pickled with
+# DeepSpeed data structures it has to be available in the current python environment
+from deepspeed.utils import logger
 
 
 @dataclass
@@ -137,7 +136,6 @@ def parse_model_states(files):
 
 
 def parse_optim_states(files, ds_checkpoint_dir):
-
     total_files = len(files)
     state_dicts = []
     for f in files:
