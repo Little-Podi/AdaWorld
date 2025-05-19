@@ -1,6 +1,6 @@
 # World Model Adaptation
 
-In our paper, we borrow the mini DMLab and Minecraft datasets from [Diffusion Forcing](https://github.com/buoyancy99/diffusion-forcing) for world model adaptation experiments.
+In our paper, we borrow the mini DMLab and Minecraft datasets from [Diffusion Forcing](https://github.com/buoyancy99/diffusion-forcing) for world model adaptation experiments (be aware of the different action indices of these two when processing the data).
 
 ### For environments with discrete action spaces
 
