@@ -67,10 +67,14 @@ You can also download and compile other datasets we used:
   - We extract as many video sequences as possible regardless of their viewpoint.
   - Please find `download_open_x.sh` and `process_rtx.py` to see how we extract raw videos.
 - [Ego4D](https://github.com/facebookresearch/Ego4d)
+  - Follow the [instruction](https://ego4d-data.org/docs/start-here) to obtain the license.
+  - We use the `full_scale` set. You may resize the videos after downloading to save storage and speed up reading.
 - [Something-Something V2](https://www.qualcomm.com/developer/software/something-something-v-2-dataset)
 - [MiraData](https://github.com/mira-space/MiraData)
   - We only use the first 8K videos (3D rendered games and city walking tours) in the list.
+  - We will gradually upload the video splits we used to [Hugging Face](https://huggingface.co/datasets/Little-Podi/AdaWorld).
   - You can download more if you want and have sufficient storage.
+  - A modified script can be found at `download_miradata_360p.py`.
 
 or those not used (but we have tried):
 - [Panda-70M](https://github.com/snap-research/Panda-70M)
