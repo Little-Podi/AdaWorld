@@ -72,7 +72,7 @@ You can also download and compile other datasets we used:
 - [Something-Something V2](https://www.qualcomm.com/developer/software/something-something-v-2-dataset)
 - [MiraData](https://github.com/mira-space/MiraData)
   - We only use the first 8K videos (3D rendered games and city walking tours) in the list.
-  - We will gradually upload the video splits we used to [Hugging Face](https://huggingface.co/datasets/Little-Podi/AdaWorld).
+  - We will progressively upload the video splits we used to [Hugging Face](https://huggingface.co/datasets/Little-Podi/AdaWorld).
   - You can download more if you want and have sufficient storage.
   - A modified script can be found at `download_miradata_360p.py`.
 

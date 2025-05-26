@@ -182,6 +182,23 @@ class DiffusionEngine(LightningModule):
             if embedder.is_trainable:
                 params = params + list(filter(lambda x: x.requires_grad, embedder.parameters()))
         opt = self.instantiate_optimizer_from_config(params, lr, self.optimizer_config)
+
+        # Learning rate discount during specialized world model adaptation
+        # param_dicts = [
+        #     {
+        #         "params": list(self.model.parameters()),
+        #         "lr": lr * 0.1
+        #     }
+        # ]
+        # for embedder in self.conditioner.embedders:
+        #     if embedder.is_trainable:
+        #         param_dicts.append(
+        #             {
+        #                 "params": list(filter(lambda x: x.requires_grad, embedder.parameters()))
+        #             }
+        #         )
+        # opt = self.instantiate_optimizer_from_config(param_dicts, lr, self.optimizer_config)
+
         if self.scheduler_config is None:
             return opt
         else:

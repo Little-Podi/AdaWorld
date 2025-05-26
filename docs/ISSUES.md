@@ -15,7 +15,7 @@
    - You may forget to align `num_nodes` and `devices` in `lam/config/lam.yaml` with your GPU setup.
    - Please check `lam/config/lam.yaml` and modify them accordingly.
 
-4. Get stuck at loading FrozenCLIPEmbedder when training the world model.
+4. `FileNotFoundError: Failed to download file (open_clip_pytorch_model.bin) for laion/CLIP-ViT-H-14-laion2B-s32B-b79K.` when building the world model.
 
     - This is likely due to a network failure.
     - Download the model from [Hugging Face](https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K) in advance and set `version` of FrozenOpenCLIPImageEmbedder in `worldmodel/vwm/modules/encoders/modules.py` to the path of `open_clip_pytorch_model.bin`.
