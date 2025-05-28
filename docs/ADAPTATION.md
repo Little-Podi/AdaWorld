@@ -1,6 +1,10 @@
 # World Model Adaptation
 
-In our paper, we borrow the mini DMLab and Minecraft datasets from [Diffusion Forcing](https://github.com/buoyancy99/diffusion-forcing) for world model adaptation experiments (be aware of the different action indices of these two when processing the data).
+### DMLab and Minecraft datasets
+
+In our paper, we borrow the data source from [TECO](https://github.com/wilson1yan/teco) for world model adaptation experiments. If you only need a few samples, you can also try the mini sets from [Diffusion Forcing](https://github.com/buoyancy99/diffusion-forcing), as downloading the TECO datasets may take a couple of days.
+
+Be aware of the different action indices of these two when processing the data. The actions should be extracted as follows: `npz_data["action"][:-1]` for DMLab and `npz_data["action"][1:]` for Minecraft.
 
 ### For environments with discrete action spaces
 
