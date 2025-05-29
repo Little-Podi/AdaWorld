@@ -13,8 +13,9 @@
 
 **TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling zero-shot action transfer, fast adaptation, and effective planning with minimal finetuning.*
 
-| ![](assets/prompt.gif) | ![](assets/teaser.gif) |
-|---|---|
+![](assets/prompt.gif)
+
+![](assets/teaser.gif)
 
 <hr style="border: 2px solid gray;"></hr>
 
