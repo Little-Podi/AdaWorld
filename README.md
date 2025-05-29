@@ -11,7 +11,18 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-**TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling efficient action transfer, adaptation, and planning with minimal finetuning.*
+**TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling zero-shot action transfer, fast adaptation, and effective planning with minimal finetuning.*
+
+<div style="display: flex; justify-content: center">
+  <div style="margin: 1px;">
+    <img src="assets/prompt.gif" width="500px">
+  </div>
+  <div style="margin: 1px;">
+    <img src="assets/teaser.gif" width="500px">
+  </div>
+</div>
+
+<hr style="border: 2px solid gray;"></hr>
 
 - Action transfer (source video &rarr; target scene)
 
@@ -31,9 +42,9 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-![](assets/teaser.jpg)
-
 We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
+
+![](assets/teaser.jpg)
 
 ## 🕹️ Getting Started
 
@@ -44,11 +55,11 @@ We introduce latent actions as a unified condition for action-aware pretraining 
 - [Visual Planning](https://github.com/Little-Podi/AdaWorld/blob/main/docs/PLANNING.md)
 - [Trouble Shooting](https://github.com/Little-Podi/AdaWorld/blob/main/docs/ISSUES.md)
 
-## ❤️ Acknowledgement
+## ❣️ Acknowledgement
 
 Our idea is implemented based on [Vista](https://github.com/OpenDriveLab/Vista) and [Jafar](https://github.com/flairox/jafar). Thanks for their great open-source work!
 
-## ⭐ Citation
+## 🌟 Citation
 If any parts of our paper and code help your research, please consider citing us and giving a star to our repository.
 ```
 @article{gao2025adaworld,
@@ -59,6 +70,6 @@ If any parts of our paper and code help your research, please consider citing us
 }
 ```
 
-## 📢 Contact
+## ✉️ Contact
 
 If you have any questions or comments, feel free to contact me through email (sygao@connect.ust.hk). Suggestions and collaborations are also highly welcome!

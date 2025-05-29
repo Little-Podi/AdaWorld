@@ -16,7 +16,7 @@ CKPT = "path_to/adaworld.safetensors"
 RESOLUTION = 256
 AUG_LEVEL = 0.1
 NUM_STEPS = 5
-CFG_SCALE = 1.05
+CFG_SCALE = 1.1
 ViDEO_LEN = 20
 CONTEXT_FRAME = 6
 
