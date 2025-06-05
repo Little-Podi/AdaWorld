@@ -1,11 +1,11 @@
 # Learning Adaptable World Models with Latent Actions
 
-[![Static Badge](https://img.shields.io/badge/Project-Page-green?style=for-the-badge)](https://adaptable-world-model.github.io)
+[![Project Page](https://img.shields.io/badge/Project-Page-green?style=for-the-badge)](https://adaptable-world-model.github.io)
 [![Arxiv](https://img.shields.io/badge/arXiv-2503.18938-b31b1b.svg?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2503.18938)
-[![HF Models](https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow?style=for-the-badge)](https://huggingface.co/Little-Podi/AdaWorld)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Models-FF4F1D.svg?style=for-the-badge&logo=Huggingface)](https://huggingface.co/Little-Podi/AdaWorld)
 
-[![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0.1-EE4C2C.svg?style=for-the-badge&logo=pytorch)](https://pytorch.org)
+[![Python](https://img.shields.io/badge/python-3.10-blue?style=for-the-badge)](https://www.python.org)
 [![License](https://img.shields.io/github/license/Little-Podi/AdaWorld?style=for-the-badge)](LICENSE)
 
 [Shenyuan Gao](https://github.com/Little-Podi), [Siyuan Zhou](https://rainbow979.github.io), [Yilun Du](https://yilundu.github.io), [Jun Zhang](https://eejzhang.people.ust.hk), [Chuang Gan](https://people.csail.mit.edu/ganchuang)
