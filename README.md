@@ -54,11 +54,11 @@ Our idea is implemented based on [Vista](https://github.com/OpenDriveLab/Vista) 
 ## 🌟 Citation
 If any parts of our paper and code help your research, please consider citing us and giving a star to our repository.
 ```
-@article{gao2025adaworld,
-  title={AdaWorld: Learning Adaptable World Models with Latent Actions}, 
-  author={Gao, Shenyuan and Zhou, Siyuan and Du, Yilun and Zhang, Jun and Gan, Chuang},
-  journal={arXiv preprint arXiv:2503.18938},
-  year={2025}
+@inproceedings{gao2025adaworld,
+ title={AdaWorld: Learning Adaptable World Models with Latent Actions},
+ author={Gao, Shenyuan and Zhou, Siyuan and Du, Yilun and Zhang, Jun and Gan, Chuang},
+ booktitle={International Conference on Machine Learning (ICML)},
+ year={2025}
 }
 ```
 
