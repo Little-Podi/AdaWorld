@@ -12,11 +12,11 @@
 
 <hr style="border: 2px solid gray;"></hr>
 
-**TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling zero-shot action transfer, fast adaptation, and effective planning with minimal finetuning.*
+**TL;DR:** *AdaWorld is a highly adaptable world model pretrained with continuous latent actions from thousands of environments, enabling zero-shot action transfer, fast adaptation, and new skill acquisition with minimal finetuning.*
 
-![](assets/prompt.gif)
+![](assets/teaser.jpg)
 
-![](assets/teaser.gif)
+We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
 
 <hr style="border: 2px solid gray;"></hr>
 
@@ -37,10 +37,6 @@
 </div>
 
 <hr style="border: 2px solid gray;"></hr>
-
-We introduce latent actions as a unified condition for action-aware pretraining from videos. AdaWorld can readily transfer actions across contexts without training. By initializing the control interface with the corresponding latent actions, AdaWorld can also be adapted into specialized world models efficiently and achieve significantly better planning results.
-
-![](assets/teaser.jpg)
 
 ## 🕹️ Getting Started
 
